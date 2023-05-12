@@ -676,8 +676,11 @@ def gen_multi():
 # print(gen_workstation_types())
 # print(gen_workstations())
 
+# THIS IS THE MAIN GENERATING SCRIPT 
 
-gen_multi()
+gen_multi() 
+
+# -----------------------------------
 # --------------- MANUAL SCRIPTS --------------------
 
 # gen_id_lists()
