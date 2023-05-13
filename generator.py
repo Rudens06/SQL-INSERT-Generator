@@ -164,8 +164,9 @@ def gen_hire_dates():
 
 def gen_random_date():
     days_to_add = random.randint(-500, 0)
+    hours_to_add = random.randint(-500, 0)
     today = datetime.today()
-    new_date = today + timedelta(days=days_to_add)
+    new_date = today + timedelta(days=days_to_add, hours=hours_to_add)
 
     return new_date
 
@@ -175,8 +176,9 @@ def gen_invoice_due_date(issued_date):
     return new_date
 
 def gen_ride_end(ride_start):
-    rand_days = random.randint(-3, 3)
-    new_date = ride_start + timedelta(days = rand_days)
+    rand_days = random.randint(0, 3)
+    rand_hours = random.randint(1, 10)
+    new_date = ride_start + timedelta(days = rand_days, hours = rand_hours)
 
     return new_date
 
