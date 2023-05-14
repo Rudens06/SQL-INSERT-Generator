@@ -4988,3 +4988,26 @@ INSERT INTO "Braucieni"(id, auto_registracijas_nr, sakuma_laiks, beigu_laiks, ie
 INSERT INTO "Braucieni"(id, auto_registracijas_nr, sakuma_laiks, beigu_laiks, iemesls, nobrauktie_kilometri, degvielas_atlikums, brauciens_no, brauciens_uz, darbinieka_id) VALUES ('b_9QmaZ00292', 'ZM35', '2023-04-19 08:00:00', '2023-04-19 10:40:00', 'lidostas pārvadājumi', 129, 20, 'Elizabetes iela 92, LV-3577, Rīga, Latvija', 'Krišjāņa Barona iela 80, LV-8376, Liepāja, Latvija', 'd_pFQsFp48s6');
 INSERT INTO "Braucieni"(id, auto_registracijas_nr, sakuma_laiks, beigu_laiks, iemesls, nobrauktie_kilometri, degvielas_atlikums, brauciens_no, brauciens_uz, darbinieka_id) VALUES ('b_9QmaZ00293', 'ZM35', '2023-04-20 09:50:00', '2023-04-20 15:30:00', 'lidostas pārvadājumi', 323, 20, 'Elizabetes iela 92, LV-3577, Rīga, Latvija', 'Krišjāņa Barona iela 80, LV-8376, Liepāja, Latvija', 'd_8sc2d31sM3');
 INSERT INTO "Braucieni"(id, auto_registracijas_nr, sakuma_laiks, beigu_laiks, iemesls, nobrauktie_kilometri, degvielas_atlikums, brauciens_no, brauciens_uz, darbinieka_id) VALUES ('b_9QmaZ00299', 'ZM35', '2023-04-28 09:00:00', '2023-04-28 10:50:00', 'lidostas pārvadājumi', 87, 20, 'Elizabetes iela 92, LV-3577, Rīga, Latvija', 'Krišjāņa Barona iela 80, LV-8376, Liepāja, Latvija', 'd_8sc2d31sM3');
+
+---- Papiluds darbavietas Labklājības Metāla birojā Elizabetes ielā
+
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc000', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc001', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc002', 'b_93mwgy5Qm9', '2.korpuss, 4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc003', 'b_93mwgy5Qm9', '2.korpuss, 4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc004', 'b_93mwgy5Qm9', '1.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc005', 'b_93mwgy5Qm9', '1.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc006', 'b_93mwgy5Qm9', '1.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc007', 'b_93mwgy5Qm9', '1.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc008', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc009', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc010', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc011', 'b_93mwgy5Qm9', '1.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc012', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc013', 'b_93mwgy5Qm9', '2.korpuss, 4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc014', 'b_93mwgy5Qm9', '2.korpuss, 4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc015', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc016', 'b_93mwgy5Qm9', '1.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc017', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc018', 'b_93mwgy5Qm9', '2.korpuss, 4.stāvs', 'dvv_dlnvqFqxpR');
+INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc019', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
