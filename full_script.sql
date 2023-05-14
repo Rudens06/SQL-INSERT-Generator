@@ -4989,7 +4989,7 @@ INSERT INTO "Braucieni"(id, auto_registracijas_nr, sakuma_laiks, beigu_laiks, ie
 INSERT INTO "Braucieni"(id, auto_registracijas_nr, sakuma_laiks, beigu_laiks, iemesls, nobrauktie_kilometri, degvielas_atlikums, brauciens_no, brauciens_uz, darbinieka_id) VALUES ('b_9QmaZ00293', 'ZM35', '2023-04-20 09:50:00', '2023-04-20 15:30:00', 'lidostas pārvadājumi', 323, 20, 'Elizabetes iela 92, LV-3577, Rīga, Latvija', 'Krišjāņa Barona iela 80, LV-8376, Liepāja, Latvija', 'd_8sc2d31sM3');
 INSERT INTO "Braucieni"(id, auto_registracijas_nr, sakuma_laiks, beigu_laiks, iemesls, nobrauktie_kilometri, degvielas_atlikums, brauciens_no, brauciens_uz, darbinieka_id) VALUES ('b_9QmaZ00299', 'ZM35', '2023-04-28 09:00:00', '2023-04-28 10:50:00', 'lidostas pārvadājumi', 87, 20, 'Elizabetes iela 92, LV-3577, Rīga, Latvija', 'Krišjāņa Barona iela 80, LV-8376, Liepāja, Latvija', 'd_8sc2d31sM3');
 
----- Papiluds darbavietas Labklājības Metāla birojā Elizabetes ielā
+---- Papildus darbavietas Labklājības Metāla birojā Elizabetes ielā
 
 INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc000', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
 INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc001', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
@@ -5011,3 +5011,172 @@ INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdA
 INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc017', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
 INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc018', 'b_93mwgy5Qm9', '2.korpuss, 4.stāvs', 'dvv_dlnvqFqxpR');
 INSERT INTO "Darbavietas"(id, biroja_id, vieta_biroja, veida_id) VALUES ('dv_DdATyBc019', 'b_93mwgy5Qm9', '4.stāvs', 'dvv_dlnvqFqxpR');
+
+
+------------------------------ ATSKAITES ----------------------------------
+
+
+---------------- 1.ATSKAITE ------------------
+
+-- Darba laiki, kad darbiniekis ir pieejams klātienē
+--
+-- Apskata viena darbinieka klātienes darba laikus jūlija pirmajās piecās darba
+-- dienās.
+--
+-- Izpildītais noteikums:
+-- Darbiniekiem ir nodrošināta iespēja iegūt laikus, kad kāds cits darbinieks
+-- būs birojā
+
+SELECT dla.darbinieka_id,
+     dla.datums,
+     dla.stundas_klatiene
+FROM "Darba_laiki" AS dla
+WHERE dla.darbinieka_id = 'd_ZGE1POsggg'
+     AND dla.datums >= '2023-06-01'
+     AND dla.datums < '2023-06-08'
+     AND dla.stundas_klatiene > 0
+ORDER BY dla.datums
+
+
+---------------- 2.ATSKAITE ------------------
+
+-- Darbinieku atalgojums, min, max un vidējais atalgojums, kā arī atalgojuma
+-- ranks starp šāda veida amatiem
+
+SELECT
+      dar.id,
+      dar.vards,
+      dar.uzvards,
+      dar.uznemuma_id,
+      uzn.nosaukums,
+      dar.amats,
+      dar.alga,
+      ama.min_alga,
+      ama.max_alga,
+      avg(dar.alga) OVER (PARTITION BY dar.amats) AS amata_videja_alga,
+      rank() OVER (PARTITION BY dar.amats ORDER BY dar.alga DESC) AS amata_algas_rangs
+FROM "Darbinieki" AS dar
+LEFT JOIN "Uznemumi" AS uzn ON uzn.id = dar.uznemuma_id
+LEFT JOIN "Amati" AS ama ON ama.nosaukums = dar.amats
+ORDER BY dar.uznemuma_id, dar.amats
+ 
+
+---------------- 3.ATSKAITE ------------------
+
+-- Darba laiku atskaite
+--
+-- Atlasa "Labklājības Metāla" uzņēmuma visu darbinieku darba laika ierobežo-
+-- jumus un aktuālos darba laikus 2023. gada aprīlī.
+-- Izskatās, ka darbinieki nevadās pēc darba laiku ierobežojumiem, un paši brīvi
+-- strādā izvēlētās stundas klātienē vai attālināti.
+--
+-- Apskatītais noteikums:
+-- Darbiniekiem-administratoriem tiek nodrošināt iespēja pārskatīt visu darbi-
+-- nieku klātienē nostrādāto stundu skaitu, lai pārliecinātos, ka darbinieks ir
+-- nostrādājis klātienē norādīto stundu skaitu.
+
+SELECT DISTINCT
+      dar.id,
+      apm.stundas_klatiene,
+      apm.stundas_attalinati,
+      sum(dla.stundas_klatiene) OVER (PARTITION BY dar.id) AS aktualas_stundas_klatiene,
+      sum(dla.stundas_attalinati) OVER (PARTITION BY dar.id) AS aktualas_stundas_attalinati
+FROM "Darbinieki" AS dar
+LEFT JOIN "Apmeklejuma_ierobezojumi" AS apm ON apm.id = dar.apmeklejuma_ierobezojuma_id
+FULL JOIN (
+       SELECT *
+         FROM "Darba_laiki"
+        WHERE datums >= '2023-04-01'
+          AND datums < '2023-05-01'
+      ) AS dla ON dla.darbinieka_id = dar.id
+WHERE dar.uznemuma_id = 'u_7F8gM1xT4d'
+    
+    
+    
+---------------- 4.ATSKAITE ------------------
+
+    
+-- Transportlidzekļu nobraukums mēneša laikā
+
+-- Atlasa un summē "Labklājības Metāla" uzņēmuma transportlīdzekļu nobraukumu
+-- aprīļa mēnesī.
+
+-- Izpildītais noteikums:
+-- Darbiniekiem-administratoriem ir pieejams detalizēts pārskats par konkrētā
+-- laika periodā izmantotajiem transportlīdzekļiem
+
+SELECT
+      bra.auto_registracijas_nr,
+      sum(bra.nobrauktie_kilometri) AS nobrauktie_kilometri_kopa
+FROM "Braucieni" AS bra
+LEFT JOIN "Transportlidzekli" AS tra ON tra.auto_registracijas_nr = bra.auto_registracijas_nr
+WHERE tra.uznemuma_id = 'u_7F8gM1xT4d'
+      AND bra.sakuma_laiks >= '2023-04-01 00:00:00'
+      AND bra.sakuma_laiks < '2023-05-01 00:00:00'
+GROUP BY bra.auto_registracijas_nr
+ 
+
+---------------- 5.ATSKAITE ------------------
+
+-- Darba vietu veidi uzņēmuma birojos
+
+SELECT vie.biroja_id,
+      bir.adrese,
+      vie.vieta_biroja,
+      vie.veida_id,
+      dve.nosaukums,
+      vie.vietu_skaits
+ FROM (
+         SELECT vie.biroja_id,
+                vie.vieta_biroja,
+                vie.veida_id,
+                count(vie.id) AS vietu_skaits
+           FROM "Darbavietas" AS vie
+      LEFT JOIN "Biroji" AS bir ON bir.id = vie.biroja_id
+      LEFT JOIN "Darbavietas_veidi" AS dve ON dve.id = vie.veida_id
+          WHERE bir.uznemuma_id = 'u_7F8gM1xT4d'
+       GROUP BY vie.biroja_id, vie.vieta_biroja, vie.veida_id
+       ORDER BY vie.biroja_id, vie.vieta_biroja
+      ) AS vie
+LEFT JOIN "Biroji" AS bir ON bir.id = vie.biroja_id
+LEFT JOIN "Darbavietas_veidi" AS dve ON dve.id = vie.veida_id
+ORDER BY bir.adrese, vie.vieta_biroja, dve.nosaukums
+ 
+
+
+---------------- 6.ATSKAITE ------------------
+ 
+-- Uzņēmumu aktuālais un norādītais darbinieku skaits
+
+SELECT uzn.id,
+      uzn.nosaukums,
+      dar.darbinieku_skaits AS akutalais_darbinieku_skaits,
+      uzn.darbinieku_skaits AS noraditais_darbinieku_skaits
+FROM (
+          SELECT uznemuma_id, count(*) AS darbinieku_skaits
+            FROM "Darbinieki"
+        GROUP BY uznemuma_id
+      ) AS dar
+LEFT JOIN "Uznemumi" AS uzn ON uzn.id = dar.uznemuma_id
+
+
+---------------- 7.ATSKAITE ------------------
+
+-- Uzņēmumu darbinieku skaits sasummēts pēc industrijas
+
+SELECT uzn.industrija, sum(uzn.darbinieku_skaits) AS kopejais_darbinieku_skaits
+FROM "Uznemumi" AS uzn
+GROUP BY uzn.industrija
+ORDER BY kopejais_darbinieku_skaits DESC
+
+
+---------------- 8.ATSKAITE ------------------
+
+-- Uzņēmumu apmaksāto un neapmaksāto rēķinu summas
+
+SELECT rek.uznemuma_id,
+       rek.statuss,
+       sum(rek.summa) AS summa
+FROM "Rekini" AS rek
+GROUP BY rek.uznemuma_id, rek.statuss
+ORDER BY rek.uznemuma_id, rek.statuss
