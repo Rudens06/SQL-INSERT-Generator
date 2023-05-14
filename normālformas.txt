@@ -1,0 +1,13 @@
+Amati - 3NF
+Apmeklejuma_ierobezojumi - 3NF
+Biroji - 3NF (kolonna `ietilpiba` nav darabietu summa birojā, bet gan lietotāja norādīts skaitlis, kas, piemēram, var apzīmēt ugunsdrošības prasības)
+Braucieni - 3NF
+Darba_laiki - 3NF
+Darbavietas - 3NF
+Darbavietas_veidi - 3NF
+Darbinieki - 3NF
+Lomas - 3NF
+Rekini - 3NF
+Transportlidzekli - 3NF
+Transportlidzeklu_rezervacijas - 3NF
+Uznemumi - 3NF
