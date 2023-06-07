@@ -175,6 +175,7 @@ INSERT INTO "Lomas"(nosaukums, apraksts) VALUES ('Lapas Administrators', 'Pilna 
 INSERT INTO "Lomas"(nosaukums, apraksts) VALUES ('Lapas Moderators', 'Uzrauga un pārvalda lietotāju pieteikumus');
 INSERT INTO "Lomas"(nosaukums, apraksts) VALUES ('Lapas Redaktors', 'Rediģē un apstiprina pieteikumus');
 INSERT INTO "Lomas"(nosaukums, apraksts) VALUES ('Lapas Apmeklētājs', 'Pārlūko vietni bez privalēģijām');
+INSERT INTO "Lomas"(nosaukums, apraksts) VALUES ('Nekā nedarītājs', 'Neko nevar izdarīt');
 
 ------- INSERT UZNEMUMI --------
 
@@ -5035,7 +5036,7 @@ WHERE dla.darbinieka_id = 'd_ZGE1POsggg'
      AND dla.datums >= '2023-06-01'
      AND dla.datums < '2023-06-08'
      AND dla.stundas_klatiene > 0
-ORDER BY dla.datums
+ORDER BY dla.datums;
 
 
 ---------------- 2.ATSKAITE ------------------
@@ -5058,8 +5059,8 @@ SELECT
 FROM "Darbinieki" AS dar
 LEFT JOIN "Uznemumi" AS uzn ON uzn.id = dar.uznemuma_id
 LEFT JOIN "Amati" AS ama ON ama.nosaukums = dar.amats
-ORDER BY dar.uznemuma_id, dar.amats
- 
+ORDER BY dar.uznemuma_id, dar.amats;
+
 
 ---------------- 3.ATSKAITE ------------------
 
@@ -5089,13 +5090,12 @@ FULL JOIN (
         WHERE datums >= '2023-04-01'
           AND datums < '2023-05-01'
       ) AS dla ON dla.darbinieka_id = dar.id
-WHERE dar.uznemuma_id = 'u_7F8gM1xT4d'
-    
-    
-    
+WHERE dar.uznemuma_id = 'u_7F8gM1xT4d';
+
+
 ---------------- 4.ATSKAITE ------------------
 
-    
+
 -- Transportlidzekļu nobraukums mēneša laikā
 
 -- Atlasa un summē "Labklājības Metāla" uzņēmuma transportlīdzekļu nobraukumu
@@ -5113,8 +5113,8 @@ LEFT JOIN "Transportlidzekli" AS tra ON tra.auto_registracijas_nr = bra.auto_reg
 WHERE tra.uznemuma_id = 'u_7F8gM1xT4d'
       AND bra.sakuma_laiks >= '2023-04-01 00:00:00'
       AND bra.sakuma_laiks < '2023-05-01 00:00:00'
-GROUP BY bra.auto_registracijas_nr
- 
+GROUP BY bra.auto_registracijas_nr;
+
 
 ---------------- 5.ATSKAITE ------------------
 
@@ -5140,12 +5140,11 @@ SELECT vie.biroja_id,
       ) AS vie
 LEFT JOIN "Biroji" AS bir ON bir.id = vie.biroja_id
 LEFT JOIN "Darbavietas_veidi" AS dve ON dve.id = vie.veida_id
-ORDER BY bir.adrese, vie.vieta_biroja, dve.nosaukums
- 
+ORDER BY bir.adrese, vie.vieta_biroja, dve.nosaukums;
 
 
 ---------------- 6.ATSKAITE ------------------
- 
+
 -- Uzņēmumu aktuālais un norādītais darbinieku skaits
 
 SELECT uzn.id,
@@ -5157,7 +5156,7 @@ FROM (
             FROM "Darbinieki"
         GROUP BY uznemuma_id
       ) AS dar
-LEFT JOIN "Uznemumi" AS uzn ON uzn.id = dar.uznemuma_id
+LEFT JOIN "Uznemumi" AS uzn ON uzn.id = dar.uznemuma_id;
 
 
 ---------------- 7.ATSKAITE ------------------
@@ -5167,7 +5166,7 @@ LEFT JOIN "Uznemumi" AS uzn ON uzn.id = dar.uznemuma_id
 SELECT uzn.industrija, sum(uzn.darbinieku_skaits) AS kopejais_darbinieku_skaits
 FROM "Uznemumi" AS uzn
 GROUP BY uzn.industrija
-ORDER BY kopejais_darbinieku_skaits DESC
+ORDER BY kopejais_darbinieku_skaits DESC;
 
 
 ---------------- 8.ATSKAITE ------------------
@@ -5179,4 +5178,62 @@ SELECT rek.uznemuma_id,
        sum(rek.summa) AS summa
 FROM "Rekini" AS rek
 GROUP BY rek.uznemuma_id, rek.statuss
-ORDER BY rek.uznemuma_id, rek.statuss
+ORDER BY rek.uznemuma_id, rek.statuss;
+
+
+---------------- 9.ATSKAITE ------------------
+
+-- Uzņēmumu biroji, piemēram, Liepājā
+
+   SELECT bir.id, uzn.nosaukums, bir.adrese
+     FROM "Biroji" AS bir
+LEFT JOIN "Uznemumi" AS uzn ON uzn.id = bir.uznemuma_id
+    WHERE bir.adrese LIKE '%Liepāja%';
+
+
+---------------- 10.ATSKAITE ------------------
+
+-- Darbinieku skaits pēc lomām starp uzņēmumiem metālapstrādes nozarē
+
+   SELECT l.nosaukums, COUNT(*)
+     FROM "Lomas" AS l
+LEFT JOIN "Darbinieki" AS dar ON dar.lomas_nosaukums = l.nosaukums
+LEFT JOIN "Uznemumi" AS uzn ON uzn.id = dar.uznemuma_id
+    WHERE uzn.industrija = 'Metālapstrāde'
+ GROUP BY l.nosaukums;
+
+
+---------------- 11.ATSKAITE ------------------
+
+-- Darbinieku skaits pēc lomām starp visiem uzņēmumiem, apskata visas lomas, arī
+-- tās, kur nulle darbinieku
+
+   SELECT l.nosaukums, COUNT(dar.id)
+     FROM "Lomas" AS l
+FULL JOIN "Darbinieki" AS dar ON dar.lomas_nosaukums = l.nosaukums
+ GROUP BY l.nosaukums;
+
+
+---------------- 12.ATSKAITE ------------------
+
+-- Visu apmaksāto un neapmaksāto rēķinu summas no 2022 gada
+
+  SELECT rek.statuss, sum(rek.summa)
+    FROM "Rekini" AS rek
+   WHERE rek.izrakstisanas_datums BETWEEN '2022-01-01' AND '2022-12-31'
+GROUP BY statuss;
+
+
+---------------- 13.ATSKAITE ------------------
+
+-- Uzņēmumu pēdējā izrakstītā rēķina summas
+
+SELECT uzn.id,
+       uzn.nosaukums,
+       (SELECT rek.summa
+          FROM "Rekini" AS rek
+         WHERE rek.uznemuma_id = uzn.id
+      ORDER BY rek.izrakstisanas_datums DESC
+         LIMIT 1
+       ) AS pedeja_rekina_summa
+  FROM "Uznemumi" AS uzn;
